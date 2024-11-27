@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Tip Calculator</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<style>
+  #buttons:hover {
+    transform: scale(1.075); /* Scale the button to 1.1 times its original size */
+ }
+</style>
+
+<body>
+    <main>
+        <h1 style="text-align: center;" >Tip Calculator</h1>
+        <form action="display_tip.php" method="post">
+
+            <div id="data">
+                <label>Name of Order: <a style="color:red;">*</a></label>
+                <input type="text" name="product_description" required
+		pattern="[a-zA-Z0-9\s]+" title="Avoid using special characters."><br>
+		<!-- prevents special chars in submission -->
+
+                <label>Price: <a style="color:red;">*</a></label>
+		<select name="curr" id="currSelect">
+                    <option value="$">&dollar;</option>
+                    <option value="€">&euro;</option>
+                    <option value="£">&pound;</option>
+                    <option value="¥">&yen;</option>
+                </select>
+                <input type="number" step="any" name="list_price" required
+		       style="float: none; width: 12.5em;"><br>
+		<!-- Chose to use step="any" instead of step="0.01" 
+		     "any" gives incrementer a more useful increment of +-1, 
+			but allows users to input more than 2 decimals (rounded afterwards)
+		     "0.01" restricts users to 2 decimals, 
+			but incrementer only goes up $.01 per increment... -->
+
+		<div id = "tipInput">
+                <label>Tip:</label>
+                <input type="number" step="any" name="tip_percent" 
+		placeholder="18% recommended" id="tipRec"><span>%</span><br>
+		</div>
+
+		<label>Tax: <a style="color:red;">*</a></label>
+                <input type="number" step="any" name="tax_percent" required><span>%</span><br>
+
+
+		<label>Gift Card:</label>
+                <input type="number" step="any" name="gift_card"><br>
+
+
+		<label>Split Bill:</label>
+		<select name="num_cust" style="text-align: center;"> 
+                  <option value="1">1 person</option>
+                  <option value="2">2 people</option>
+                  <option value="3">3 people</option>
+                  <option value="4">4 people</option>
+                  <option value="5">5 people</option>
+               </select><br><br>
+
+            </div>
+
+            <div id="buttons">
+                <label>&nbsp;</label>
+                <input type="submit" value="Calculate Price"><br>
+            </div>
+
+        </form>
+    </main>
+
+
+   <script>		// JS for dynamic tipping placeholder because Im extra	
+
+        // Function to update the placeholder value of tip input based on selected currency
+        document.getElementById("currSelect").addEventListener("change", function() {
+            var currency = this.value;
+            var placeholderText;
+
+	   /* 
+	    while(currency === "¥")
+               tipInput.style.display = "none";   // have tip dissapear, guess
+	*/					  // it's rude to tip in Japan
+
+            if (currency === "¥"){ 
+               placeholderText = "No tip. Thank you"; // in case somehow the field doesn't dissapear
+               tipInput.style.display = "none";
+	    }
+	    else{
+	       tipInput.style.display = "block";
+
+	       if (currency === "€") 
+                  placeholderText = "8% recommended";
+               else if (currency === "£") 
+                  placeholderText = "12% recommended";
+               else 
+                  placeholderText = "18% recommended";   // $, if selected
+	    }
+
+            document.getElementById("tipRec").placeholder = placeholderText; // assign to placeholder 
+        });
+
+
+/* SWITCH CASE EQUIVALENT 
+
+            switch(currency) {
+                default:   // $, if clicked back to
+                    placeholderText = "18% recommended";
+                    break;
+                case "€":
+                    placeholderText = "15% recommended";
+                    break;
+                case "£":
+                    placeholderText = "20% recommended";
+                    break;
+                case "¥":
+                    placeholderText = "10% recommended";
+                    break;
+            }
+*/
+
+   </script>
+
+
+</body>
+</html>
+
+
+
+
+
+
